@@ -881,6 +881,106 @@ nav {
 }
 
 /* ========================================
+   SECTION: CONTACT
+======================================== */
+#contact {
+  padding: 120px 24px;
+  text-align: center;
+}
+
+.contact-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.contact-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--kin);
+  display: block;
+  margin-bottom: 24px;
+}
+
+.contact-line {
+  width: 32px;
+  height: 1px;
+  background: var(--kin);
+  margin: 0 auto 40px;
+  opacity: 0.5;
+}
+
+.contact-heading {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(20px, 3vw, 32px);
+  font-weight: 200;
+  letter-spacing: 0.2em;
+  color: var(--gin-nezumi);
+  margin-bottom: 24px;
+}
+
+.contact-desc {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(12px, 1.3vw, 14px);
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  line-height: 2.5;
+  color: var(--gin-nezumi-muted);
+  margin-bottom: 48px;
+}
+
+.contact-ctas {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.contact-cta {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--kin);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 40px;
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  transition: all 0.4s ease;
+}
+
+.contact-cta:hover {
+  border-color: var(--kin);
+  background: rgba(197, 160, 89, 0.05);
+  gap: 18px;
+}
+
+.contact-arrow {
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: var(--kin);
+  position: relative;
+}
+
+.contact-arrow::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-top: 1px solid var(--kin);
+  border-right: 1px solid var(--kin);
+  transform: rotate(45deg);
+}
+
+/* ========================================
    FOOTER
 ======================================== */
 footer {
@@ -1012,6 +1112,7 @@ footer {
     <li><a href="#works">Works</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#profile">Profile</a></li>
+    <li><a href="#contact">Contact</a></li>
   </ul>
   <div class="menu-toggle" id="menuToggle">
     <span></span><span></span><span></span>
@@ -1214,6 +1315,31 @@ footer {
 </section>
 
 <!-- ============================
+     CONTACT
+============================= -->
+<div class="section-divider"></div>
+
+<section id="contact">
+  <div class="contact-content reveal">
+    <span class="contact-label">Contact</span>
+    <div class="contact-line"></div>
+    <h2 class="contact-heading">Work with SUMI X</h2>
+    <p class="contact-desc">
+      商業揮毫 / ロゴタイプ制作 / 空間書道 / コラボレーション<br>
+      ご依頼・ご相談はDMよりお気軽にどうぞ。
+    </p>
+    <div class="contact-ctas">
+      <a href="https://www.instagram.com/sumix__official/" target="_blank" rel="noopener" class="contact-cta">
+        Instagram DM <span class="contact-arrow"></span>
+      </a>
+      <a href="mailto:takamineyasuyuki4@gmail.com" class="contact-cta">
+        Email <span class="contact-arrow"></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================
      FOOTER
 ============================= -->
 <footer>
@@ -1222,7 +1348,7 @@ footer {
     <a href="https://x.com/SUMIX_official" target="_blank" rel="noopener">X (Twitter)</a>
     <a href="https://www.instagram.com/sumix__official/" target="_blank" rel="noopener">Instagram</a>
   </div>
-  <p class="footer-copy">&copy; 2025 SUMI X. All rights reserved.</p>
+  <p class="footer-copy">&copy; 2026 SUMI X. All rights reserved.</p>
 </footer>
 
 <!-- ============================
