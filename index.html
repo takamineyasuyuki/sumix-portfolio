@@ -760,6 +760,96 @@ nav {
   transform: rotate(45deg);
 }
 
+/* Digital intro */
+.digital-intro {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(13px, 1.4vw, 15px);
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  line-height: 2.5;
+  color: var(--gin-nezumi-muted);
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 80px;
+}
+
+/* Services grid */
+.services-grid {
+  max-width: 1000px;
+  margin: 0 auto 80px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+@media (max-width: 768px) {
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    max-width: 400px;
+  }
+}
+
+.service-item {
+  padding: 36px 24px;
+  border: 1px solid rgba(197, 160, 89, 0.08);
+  transition: border-color 0.4s;
+}
+
+.service-item:hover {
+  border-color: rgba(197, 160, 89, 0.25);
+}
+
+.service-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--kin);
+  display: block;
+  margin-bottom: 16px;
+}
+
+.service-desc {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 0.03em;
+  line-height: 2.2;
+  color: var(--gin-nezumi-muted);
+}
+
+/* Case Study */
+.case-study {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.case-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--kin);
+  display: block;
+  margin-bottom: 24px;
+}
+
+.case-line {
+  width: 32px;
+  height: 1px;
+  background: var(--kin);
+  margin: 0 auto 32px;
+  opacity: 0.5;
+}
+
+.case-study .project-card {
+  text-align: left;
+}
+
 /* Floating digital noise particles */
 .digital-particles {
   position: absolute;
@@ -1258,20 +1348,40 @@ footer {
 
   <div class="digital-particles" id="digitalParticles"></div>
 
-  <div class="projects-grid">
-    <a href="https://oracle-engine-uaes.onrender.com/" target="_blank" rel="noopener" class="project-card reveal">
-      <span class="project-tag">AI Diagnosis</span>
+  <!-- Service description -->
+  <p class="digital-intro reveal">
+    意志を形にするためのAI設計とWeb開発。<br>
+    構想段階から実装まで、一気通貫で設計します。
+  </p>
+
+  <!-- Services -->
+  <div class="services-grid reveal">
+    <div class="service-item">
+      <span class="service-label">AI App Development</span>
+      <p class="service-desc">AI診断ツール・チャットボット・業務自動化など、目的に最適化されたAIアプリケーションを設計・開発。</p>
+    </div>
+    <div class="service-item">
+      <span class="service-label">Web Design & Development</span>
+      <p class="service-desc">ブランドの世界観を体現する高品質なWebサイトを、デザインからコーディングまで一人で完結。</p>
+    </div>
+    <div class="service-item">
+      <span class="service-label">Brand Site / Portfolio</span>
+      <p class="service-desc">個人・企業のブランディングに特化したポートフォリオサイト。本サイトと同水準のクオリティで制作。</p>
+    </div>
+  </div>
+
+  <!-- Case Study -->
+  <div class="case-study reveal">
+    <span class="case-label">Case Study</span>
+    <div class="case-line"></div>
+    <a href="https://oracle-engine-uaes.onrender.com/" target="_blank" rel="noopener" class="project-card">
+      <span class="project-tag">AI Diagnosis Tool</span>
       <h3 class="glitch-text">Oracle Engine</h3>
-      <p>MBTI性格診断とAIを組み合わせた副業適性診断エンジン。あなたの性格タイプに最適化されたAI副業ロードマップを生成する。</p>
+      <p>MBTI性格診断とAIを組み合わせた副業適性診断エンジン。性格タイプに最適化されたAI副業ロードマップを自動生成する自社プロダクト。</p>
       <span class="project-link">
         Experience <span class="project-link-arrow"></span>
       </span>
     </a>
-
-    <div class="project-card reveal" style="border: none; opacity: 0.35; cursor: default; background: transparent;">
-      <span class="project-tag">02 / Exploration</span>
-      <p>アナログとデジタルの交差点における、新たな可能性を探求中。</p>
-    </div>
   </div>
 </section>
 
