@@ -29,7 +29,7 @@
 }
 
 :root {
-  --sumi: #050505;
+  --sumi: #000000;
   --sumi-light: #0a0a0a;
   --gin-nezumi: #E0E0E0;
   --gin-nezumi-muted: #888888;
@@ -353,12 +353,22 @@ nav {
   100% { transform: translateY(200vh); }
 }
 
+.hero-heading {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(16px, 2.5vw, 24px);
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  color: var(--kin);
+  margin-bottom: 20px;
+  opacity: 0;
+}
+
 .hero-sub {
   font-family: 'Inter', sans-serif;
-  font-size: clamp(10px, 1.5vw, 13px);
+  font-size: clamp(10px, 1.3vw, 13px);
   font-weight: 200;
-  letter-spacing: 8px;
-  text-transform: uppercase;
+  letter-spacing: 4px;
+  line-height: 2.4;
   color: var(--gin-nezumi-muted);
   opacity: 0;
 }
@@ -403,112 +413,67 @@ nav {
 }
 
 /* ========================================
-   SECTION: PHILOSOPHY
+   SECTION: MANIFESTO
 ======================================== */
-#philosophy {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 120px 24px;
+#manifesto {
+  padding: 0 24px 120px;
   position: relative;
 }
 
-.philosophy-content {
-  max-width: 1000px;
+.manifesto-block {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 100px 0;
   text-align: center;
 }
 
-/* Dual poles layout */
-.philosophy-poles {
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-  gap: 0;
-  margin-bottom: 80px;
-}
-
-.philosophy-pole {
-  flex: 1;
-  max-width: 360px;
-  padding: 48px 32px;
-}
-
-.philosophy-pole .pole-label {
+.manifesto-label {
   font-family: 'Inter', sans-serif;
   font-size: 9px;
   font-weight: 400;
   letter-spacing: 6px;
   text-transform: uppercase;
   color: var(--kin);
-  margin-bottom: 20px;
+  display: block;
+  margin-bottom: 24px;
 }
 
-.philosophy-pole .pole-title {
-  font-family: 'Zen Old Mincho', serif;
-  font-size: clamp(20px, 3vw, 28px);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--gin-nezumi);
-  margin-bottom: 16px;
+.manifesto-line {
+  width: 32px;
+  height: 1px;
+  background: var(--kin);
+  margin: 0 auto 40px;
+  opacity: 0.5;
 }
 
-.philosophy-pole .pole-desc {
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-  font-weight: 200;
-  letter-spacing: 2px;
-  line-height: 2.2;
-  color: var(--gin-nezumi-muted);
-}
-
-.philosophy-divider-vertical {
-  width: 1px;
-  background: linear-gradient(to bottom, transparent, var(--kin), transparent);
-  opacity: 0.3;
-  align-self: stretch;
-}
-
-@media (max-width: 768px) {
-  .philosophy-poles {
-    flex-direction: column;
-    align-items: center;
-  }
-  .philosophy-divider-vertical {
-    width: 40px;
-    height: 1px;
-    background: linear-gradient(to right, transparent, var(--kin), transparent);
-    align-self: auto;
-  }
-  .philosophy-pole {
-    padding: 32px 16px;
-  }
-}
-
-/* Main statement */
-.philosophy-statement {
-  font-family: 'Zen Old Mincho', serif;
-  font-size: clamp(13px, 1.8vw, 17px);
-  font-weight: 500;
+.manifesto-text {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(13px, 1.6vw, 16px);
+  font-weight: 300;
   letter-spacing: 0.05em;
   line-height: 2.8;
   color: var(--gin-nezumi);
-  max-width: 640px;
-  margin: 0 auto 48px;
 }
 
-.philosophy-closing {
-  font-family: 'Inter', sans-serif;
-  font-size: clamp(11px, 1.2vw, 13px);
-  font-weight: 200;
-  letter-spacing: 3px;
-  line-height: 2.2;
-  color: var(--gin-nezumi-muted);
+.manifesto-synthesis {
+  padding-bottom: 60px;
 }
 
-.philosophy-closing .highlight {
+.manifesto-coda {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(14px, 1.8vw, 18px);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  line-height: 2.5;
+  color: var(--gin-nezumi);
+  margin-top: 60px;
+}
+
+.manifesto-coda .highlight {
   color: var(--kin);
-  font-weight: 400;
+  font-weight: 500;
+  font-size: clamp(18px, 2.5vw, 28px);
+  letter-spacing: 0.15em;
 }
 
 /* ========================================
@@ -1054,7 +1019,7 @@ footer {
 <nav>
   <a href="#hero" class="nav-logo">SUMI X</a>
   <ul class="nav-links" id="navLinks">
-    <li><a href="#philosophy">Philosophy</a></li>
+    <li><a href="#manifesto">Manifesto</a></li>
     <li><a href="#works">Works</a></li>
     <li><a href="#projects">Projects</a></li>
     <li><a href="#profile">Profile</a></li>
@@ -1077,7 +1042,12 @@ footer {
   <div class="hero-content">
     <h1 class="hero-title" id="heroTitle">SUMI X</h1>
     <div class="hero-divider" id="heroDivider"></div>
-    <p class="hero-sub" id="heroSub">Calligraphy &times; Artificial Intelligence</p>
+    <p class="hero-heading" id="heroHeading">Analog Soul, Digital Architecture.</p>
+    <p class="hero-sub" id="heroSub">
+      Ink is breath.<br>
+      Code is structure.<br>
+      SUMI X designs meaning between them.
+    </p>
   </div>
 
   <div class="scroll-indicator">
@@ -1091,37 +1061,46 @@ footer {
 ============================= -->
 <div class="section-divider"></div>
 
-<section id="philosophy">
-  <div class="philosophy-content">
+<section id="manifesto">
 
-    <!-- Dual Poles -->
-    <div class="philosophy-poles reveal">
-      <div class="philosophy-pole">
-        <div class="pole-label">Analog</div>
-        <div class="pole-title">書</div>
-        <p class="pole-desc">AIの介在しない、<br>呼吸と肉体による<br>100%のアナログ表現。</p>
-      </div>
-      <div class="philosophy-divider-vertical"></div>
-      <div class="philosophy-pole">
-        <div class="pole-label">Digital</div>
-        <div class="pole-title">設計</div>
-        <p class="pole-desc">感情を排した、<br>論理とコードによる<br>100%のデジタル知能。</p>
-      </div>
-    </div>
-
-    <!-- Main Statement -->
-    <p class="philosophy-statement reveal">
-      筆を執るとき、私は100%のアナログになる。<br>
-      コードを組むとき、私は100%のデジタルになる。<br>
-      この極限の二極を往来し、<br>
-      一人の人間の中で統合すること。
+  <!-- The Analog Pillar -->
+  <div class="manifesto-block reveal">
+    <span class="manifesto-label">The Analog Pillar</span>
+    <div class="manifesto-line"></div>
+    <p class="manifesto-text">
+      書は、呼吸と肉体による一度きりの真実である。<br>
+      墨は嘘をつかない。<br>
+      そこに刻まれるのは、技術では代替できない「生の痕跡」だ。
     </p>
-
-    <p class="philosophy-closing reveal">
-      それが<span class="highlight">SUMI X</span>の真髄である。
-    </p>
-
   </div>
+
+  <!-- The Digital Pillar -->
+  <div class="manifesto-block reveal">
+    <span class="manifesto-label">The Digital Pillar</span>
+    <div class="manifesto-line"></div>
+    <p class="manifesto-text">
+      設計とは、意志を拡張するための器である。<br>
+      AIは冷たい計算ではない。感性を守り、広げるための外部知能だ。<br>
+      論理は、創造をスケールさせる武器である。
+    </p>
+  </div>
+
+  <!-- The Synthesis -->
+  <div class="manifesto-block manifesto-synthesis reveal">
+    <span class="manifesto-label">The Synthesis</span>
+    <div class="manifesto-line"></div>
+    <p class="manifesto-text">
+      感性なき知性は空虚であり、知性なき感性は無力である。<br>
+      100%のアナログと、100%のデジタル。<br>
+      相反する力が一人の人間の中で共鳴するとき、<br>
+      新しい時代の人間像が立ち上がる。
+    </p>
+    <p class="manifesto-coda">
+      <span class="highlight">SUMI X</span><br>
+      それは、伝統と未来を接続する実験である。
+    </p>
+  </div>
+
 </section>
 
 <!-- ============================
@@ -1396,11 +1375,16 @@ footer {
       duration: 0.8,
       ease: 'power2.out'
     }, '-=0.3')
+    .to('#heroHeading', {
+      opacity: 1,
+      duration: 1,
+      ease: 'power2.out'
+    }, '-=0.2')
     .to('#heroSub', {
       opacity: 1,
-      duration: 0.8,
+      duration: 1,
       ease: 'power2.out'
-    }, '-=0.4');
+    }, '-=0.5');
   }
 
   // ========== SCROLL REVEAL (GSAP + ScrollTrigger) ==========
@@ -1490,16 +1474,18 @@ footer {
     lastScroll = currentScroll;
   }, { passive: true });
 
-  // ========== PHILOSOPHY PARALLAX ==========
-  gsap.to('.philosophy-poles', {
-    scrollTrigger: {
-      trigger: '#philosophy',
-      start: 'top bottom',
-      end: 'bottom top',
-      scrub: 1
-    },
-    y: -30,
-    ease: 'none'
+  // ========== MANIFESTO PARALLAX ==========
+  gsap.utils.toArray('.manifesto-block').forEach(block => {
+    gsap.to(block, {
+      scrollTrigger: {
+        trigger: block,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1
+      },
+      y: -20,
+      ease: 'none'
+    });
   });
 
 })();
