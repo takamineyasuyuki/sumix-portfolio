@@ -549,35 +549,34 @@ nav {
    SECTION: WORKS (Analog)
 ======================================== */
 #works {
-  padding: 120px 0;
+  padding: 120px 24px;
   position: relative;
-  overflow: hidden;
 }
 
-.works-slider {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
+.works-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
 }
 
-.works-track {
+@media (max-width: 900px) {
+  .works-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    max-width: 500px;
+  }
+}
+
+.work-card {
   display: flex;
-  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-.work-slide {
-  min-width: 100%;
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 60px;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
 
 .work-image-frame {
   position: relative;
-  width: min(500px, 80vw);
+  width: 100%;
   aspect-ratio: 4/3;
   background: var(--sumi-light);
   overflow: hidden;
@@ -608,64 +607,30 @@ nav {
 }
 
 .work-info {
-  max-width: 320px;
+  padding-top: 20px;
 }
 
 .work-info .work-number {
   font-family: 'Inter', sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 4px;
   color: var(--kin);
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .work-info h3 {
   font-family: 'Zen Old Mincho', serif;
-  font-size: clamp(20px, 3vw, 28px);
+  font-size: clamp(16px, 2vw, 22px);
   font-weight: 700;
-  letter-spacing: 0.08em;
-  margin-bottom: 16px;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
   color: var(--gin-nezumi);
 }
 
 .work-info p {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 300;
   line-height: 2;
-  color: var(--gin-nezumi-muted);
-}
-
-.works-nav {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 32px;
-  margin-top: 60px;
-}
-
-.works-nav button {
-  background: none;
-  border: 1px solid rgba(197, 160, 89, 0.3);
-  color: var(--gin-nezumi);
-  width: 48px;
-  height: 48px;
-  cursor: pointer;
-  font-size: 18px;
-  transition: all 0.3s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.works-nav button:hover {
-  border-color: var(--kin);
-  background: rgba(197, 160, 89, 0.05);
-}
-
-.works-counter {
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-  letter-spacing: 3px;
   color: var(--gin-nezumi-muted);
 }
 
@@ -1172,38 +1137,42 @@ footer {
     <div class="line"></div>
   </div>
 
-  <div class="works-slider">
-    <div class="works-track" id="worksTrack">
-      <!-- Slide 1 -->
-      <div class="work-slide">
-        <div class="work-image-frame">
-          <img src="images/work1.jpg" alt="那覇空港 国内線3階 チェックインロビー">
-        </div>
-        <div class="work-info">
-          <div class="work-number">01 / 02</div>
-          <h3>那覇空港 国内線3階<br>チェックインロビー</h3>
-          <p>国内線チェックインロビー常設。多くの旅人が行き交う出発の地に、空間を定義する「那覇空港」の四文字を揮毫。</p>
-        </div>
+  <div class="works-grid">
+    <!-- Work 1 -->
+    <div class="work-card reveal">
+      <div class="work-image-frame">
+        <img src="images/work1.jpg" alt="那覇空港 国内線3階 チェックインロビー">
       </div>
-
-      <!-- Slide 2 -->
-      <div class="work-slide">
-        <div class="work-image-frame">
-          <img src="images/work2.jpg" alt="錦鯉">
-        </div>
-        <div class="work-info">
-          <div class="work-number">02 / 02</div>
-          <h3>錦鯉</h3>
-          <p>For the Vancouver Nishiki Koi. British Columbia, Canada.</p>
-        </div>
+      <div class="work-info">
+        <div class="work-number">01 / 03</div>
+        <h3>那覇空港 国内線3階<br>チェックインロビー</h3>
+        <p>国内線チェックインロビー常設。多くの旅人が行き交う出発の地に、空間を定義する「那覇空港」の四文字を揮毫。</p>
       </div>
     </div>
-  </div>
 
-  <div class="works-nav">
-    <button id="worksPrev" aria-label="Previous">&#8592;</button>
-    <span class="works-counter"><span id="currentSlide">01</span> / <span id="totalSlides">02</span></span>
-    <button id="worksNext" aria-label="Next">&#8594;</button>
+    <!-- Work 2 -->
+    <div class="work-card reveal">
+      <div class="work-image-frame">
+        <img src="images/work2.jpg" alt="錦鯉">
+      </div>
+      <div class="work-info">
+        <div class="work-number">02 / 03</div>
+        <h3>錦鯉</h3>
+        <p>For the Vancouver Nishiki Koi. British Columbia, Canada.</p>
+      </div>
+    </div>
+
+    <!-- Work 3 -->
+    <div class="work-card reveal">
+      <div class="work-image-frame">
+        <img src="images/work3.jpg" alt="SOUL - Collaboration with Vancouver Rap Artist">
+      </div>
+      <div class="work-info">
+        <div class="work-number">03 / 03</div>
+        <h3>SOUL | Collaboration with<br>Vancouver Rap Artist</h3>
+        <p>バンクーバーを拠点とするラップアーティスト "Soul" とのコラボレーション作品。伝統的な書の肉筆と、現代のストリートカルチャーが交差する瞬間を視覚化。「魂」という共通言語を通じて、表現の境界線を再定義するプロジェクト。</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -1479,42 +1448,6 @@ footer {
       }
     });
   });
-
-  // ========== WORKS SLIDER ==========
-  const track = document.getElementById('worksTrack');
-  const prevBtn = document.getElementById('worksPrev');
-  const nextBtn = document.getElementById('worksNext');
-  const currentSlideEl = document.getElementById('currentSlide');
-  const slides = track.querySelectorAll('.work-slide');
-  let currentIndex = 0;
-
-  function goToSlide(index) {
-    if (index < 0) index = slides.length - 1;
-    if (index >= slides.length) index = 0;
-    currentIndex = index;
-    track.style.transform = `translateX(-${currentIndex * 100}%)`;
-    currentSlideEl.textContent = String(currentIndex + 1).padStart(2, '0');
-  }
-
-  prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
-  nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
-
-  // Touch/swipe support
-  let touchStartX = 0;
-  let touchEndX = 0;
-
-  track.addEventListener('touchstart', e => {
-    touchStartX = e.changedTouches[0].screenX;
-  }, { passive: true });
-
-  track.addEventListener('touchend', e => {
-    touchEndX = e.changedTouches[0].screenX;
-    const diff = touchStartX - touchEndX;
-    if (Math.abs(diff) > 50) {
-      if (diff > 0) goToSlide(currentIndex + 1);
-      else goToSlide(currentIndex - 1);
-    }
-  }, { passive: true });
 
   // ========== DIGITAL PARTICLES ==========
   const particlesContainer = document.getElementById('digitalParticles');
