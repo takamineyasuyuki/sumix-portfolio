@@ -832,64 +832,48 @@ nav {
 }
 
 .profile-text h3 {
-  font-family: 'Zen Old Mincho', serif;
+  font-family: 'Noto Serif JP', serif;
   font-size: clamp(24px, 4vw, 36px);
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-weight: 500;
+  letter-spacing: 0.2em;
   margin-bottom: 12px;
   color: var(--gin-nezumi);
 }
 
 .profile-text .profile-name-en {
   font-family: 'Inter', sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 300;
-  letter-spacing: 4px;
+  letter-spacing: 6px;
   text-transform: uppercase;
   color: var(--kin);
-  margin-bottom: 32px;
+  margin-bottom: 12px;
   display: block;
 }
 
-.profile-text .profile-bio {
-  font-size: 14px;
-  font-weight: 300;
-  line-height: 2.2;
-  color: var(--gin-nezumi-muted);
-  margin-bottom: 32px;
-}
-
-.profile-text .profile-bio strong {
-  color: var(--gin-nezumi);
-  font-weight: 400;
-}
-
-.profile-details {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding-top: 24px;
-  border-top: 1px solid rgba(197, 160, 89, 0.1);
-}
-
-.profile-detail {
-  display: flex;
-  gap: 24px;
-}
-
-.profile-detail .detail-label {
+.profile-text .profile-role {
+  font-family: 'Inter', sans-serif;
   font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--kin);
-  min-width: 80px;
+  font-weight: 200;
+  letter-spacing: 4px;
+  color: var(--gin-nezumi-muted);
+  display: block;
+  margin-bottom: 40px;
 }
 
-.profile-detail .detail-value {
-  font-size: 13px;
+.profile-text .profile-bio {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(13px, 1.4vw, 15px);
   font-weight: 300;
+  letter-spacing: 0.05em;
+  line-height: 2.5;
   color: var(--gin-nezumi-muted);
+  margin-bottom: 28px;
+}
+
+.profile-text .profile-future {
+  color: var(--kin);
+  margin-top: 12px;
 }
 
 /* ========================================
@@ -1209,29 +1193,18 @@ footer {
     <div class="profile-text reveal-right">
       <h3>高嶺 泰志</h3>
       <span class="profile-name-en">Yasuyuki Takamine</span>
+      <span class="profile-role">Calligraphy Artist / AI Engineer</span>
       <p class="profile-bio">
-        書道家、AI設計者。<strong>カナダ・バンクーバー</strong>を拠点に活動。<br><br>
-        幼少期より書道を学び、筆の運びの中に「呼吸」と「魂」を見出す。
-        その後、テクノロジーの世界に深く没入し、人工知能の設計と開発に携わる。<br><br>
-        アナログの温もりとデジタルの知性。
-        相反する二つの力を統合し、<strong>新たな表現の地平</strong>を切り拓くことを使命とする。<br><br>
-        2026年8月、活動拠点を日本へ。アナログとデジタルの統合をさらに加速させる。
+        日本で伝統の真髄を掴み、バンクーバーで世界の視座を得る。<br>
+        筆を執り「生の痕跡」を刻み、コードを綴り「意志の拡張」を設計する。
       </p>
-
-      <div class="profile-details">
-        <div class="profile-detail">
-          <span class="detail-label">Base</span>
-          <span class="detail-value">Vancouver (Until Aug 2026) / Japan</span>
-        </div>
-        <div class="profile-detail">
-          <span class="detail-label">Craft</span>
-          <span class="detail-value">Calligraphy / AI Engineering</span>
-        </div>
-        <div class="profile-detail">
-          <span class="detail-label">Studio</span>
-          <span class="detail-value">SUMI X</span>
-        </div>
-      </div>
+      <p class="profile-bio">
+        100%のアナログと、100%のデジタル。<br>
+        あらゆる境界を往来し、新しい時代の人間像を体現する SUMI X の創業者。
+      </p>
+      <p class="profile-bio profile-future">
+        2026年8月、活動拠点を日本へ。
+      </p>
     </div>
   </div>
 </section>
