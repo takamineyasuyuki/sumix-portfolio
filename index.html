@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUMI X — 書と人工知能の交差点</title>
+<meta name="description" content="書道家・AI設計者 高嶺泰志によるクリエイティブスタジオ SUMI X。魂はアナログに、知能はデジタルに。">
+<meta property="og:title" content="SUMI X — 書と人工知能の交差点">
+<meta property="og:description" content="書道家・AI設計者 高嶺泰志。魂はアナログに、知能はデジタルに。">
+<meta property="og:type" content="website">
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;500;700;900&family=Inter:wght@200;300;400;500&family=Zen+Old+Mincho:wght@400;700;900&display=swap" rel="stylesheet">
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+/* ========================================
+   BASE / RESET
+======================================== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --sumi: #050505;
+  --sumi-light: #0a0a0a;
+  --gin-nezumi: #E0E0E0;
+  --gin-nezumi-muted: #888888;
+  --kin: #C5A059;
+  --kin-light: #D4B06A;
+  --kin-dark: #A8873E;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--sumi);
+  color: var(--gin-nezumi);
+  font-family: 'Inter', 'Noto Serif JP', serif;
+  line-height: 1.8;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  cursor: default;
+}
+
+::selection {
+  background: var(--kin);
+  color: var(--sumi);
+}
+
+/* ========================================
+   LOADING SCREEN
+======================================== */
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--sumi);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.loader-brush {
+  width: 2px;
+  height: 0;
+  background: var(--gin-nezumi);
+  animation: brushStroke 1.5s ease-in-out forwards;
+}
+
+@keyframes brushStroke {
+  0% { height: 0; opacity: 0; }
+  50% { height: 80px; opacity: 1; }
+  100% { height: 120px; opacity: 0.6; }
+}
+
+.loader-text {
+  font-family: 'Zen Old Mincho', serif;
+  font-size: 12px;
+  letter-spacing: 8px;
+  color: var(--gin-nezumi-muted);
+  text-transform: uppercase;
+}
+
+/* ========================================
+   NOISE OVERLAY
+======================================== */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* ========================================
+   SEAL OVERLAY
+======================================== */
+.seal-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(300px, 50vw, 600px);
+  height: clamp(300px, 50vw, 600px);
+  background: url('images/seal.png') no-repeat center / contain;
+  opacity: 0.05;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ========================================
+   CUSTOM CURSOR
+======================================== */
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--kin);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.1s;
+  mix-blend-mode: difference;
+}
+
+.cursor-ring {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9997;
+  transition: transform 0.15s ease-out, width 0.3s, height 0.3s, border-color 0.3s;
+  transform: translate(-50%, -50%);
+}
+
+.cursor-ring.hover {
+  width: 60px;
+  height: 60px;
+  border-color: var(--kin);
+}
+
+/* ========================================
+   NAVIGATION
+======================================== */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 24px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  mix-blend-mode: difference;
+}
+
+.nav-logo {
+  font-family: 'Zen Old Mincho', serif;
+  font-size: 14px;
+  letter-spacing: 6px;
+  color: var(--gin-nezumi);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  gap: 32px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gin-nezumi-muted);
+  text-decoration: none;
+  transition: color 0.4s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--kin);
+  transition: width 0.4s ease;
+}
+
+.nav-links a:hover {
+  color: var(--gin-nezumi);
+}
+
+.nav-links a:hover::after {
+  width: 100%;
+}
+
+/* Mobile menu */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  z-index: 200;
+}
+
+.menu-toggle span {
+  width: 24px;
+  height: 1px;
+  background: var(--gin-nezumi);
+  transition: all 0.3s;
+}
+
+.menu-toggle.active span:nth-child(1) {
+  transform: rotate(45deg) translate(4px, 4px);
+}
+
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(4px, -4px);
+}
+
+@media (max-width: 768px) {
+  .menu-toggle { display: flex; }
+  .nav-links {
+    position: fixed;
+    inset: 0;
+    background: rgba(5, 5, 5, 0.97);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+  }
+  .nav-links.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .nav-links a {
+    font-size: 14px;
+    letter-spacing: 5px;
+  }
+  nav { padding: 20px 24px; }
+}
+
+/* ========================================
+   SECTION: HERO
+======================================== */
+#hero {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+/* Ink splatter background elements */
+.ink-particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(197,160,89,0.08) 0%, transparent 70%);
+  animation: inkFloat 20s infinite ease-in-out;
+}
+
+@keyframes inkFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.3; }
+  25% { transform: translate(30px, -20px) scale(1.1); opacity: 0.5; }
+  50% { transform: translate(-20px, 30px) scale(0.9); opacity: 0.2; }
+  75% { transform: translate(10px, 10px) scale(1.05); opacity: 0.4; }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.hero-title {
+  font-family: 'Zen Old Mincho', serif;
+  font-size: clamp(48px, 12vw, 160px);
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  color: var(--gin-nezumi);
+  position: relative;
+  line-height: 1;
+  margin-bottom: 24px;
+}
+
+.hero-title .char {
+  display: inline-block;
+  opacity: 0;
+}
+
+/* Code rain behind title */
+.code-rain {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  opacity: 0.06;
+}
+
+.code-column {
+  position: absolute;
+  top: -100%;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  color: var(--kin);
+  writing-mode: vertical-rl;
+  line-height: 1;
+  letter-spacing: 2px;
+  animation: codeRain linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes codeRain {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(200vh); }
+}
+
+.hero-sub {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(10px, 1.5vw, 13px);
+  font-weight: 200;
+  letter-spacing: 8px;
+  text-transform: uppercase;
+  color: var(--gin-nezumi-muted);
+  opacity: 0;
+}
+
+.hero-divider {
+  width: 1px;
+  height: 0;
+  background: var(--kin);
+  margin: 32px auto;
+  opacity: 0;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.scroll-indicator span {
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gin-nezumi-muted);
+  font-weight: 300;
+}
+
+.scroll-line {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--kin), transparent);
+  animation: scrollPulse 2s infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50% { opacity: 1; transform: scaleY(1.2); }
+}
+
+/* ========================================
+   SECTION: PHILOSOPHY
+======================================== */
+#philosophy {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 24px;
+  position: relative;
+}
+
+.philosophy-content {
+  max-width: 1000px;
+  text-align: center;
+}
+
+/* Dual poles layout */
+.philosophy-poles {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 0;
+  margin-bottom: 80px;
+}
+
+.philosophy-pole {
+  flex: 1;
+  max-width: 360px;
+  padding: 48px 32px;
+}
+
+.philosophy-pole .pole-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--kin);
+  margin-bottom: 20px;
+}
+
+.philosophy-pole .pole-title {
+  font-family: 'Zen Old Mincho', serif;
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--gin-nezumi);
+  margin-bottom: 16px;
+}
+
+.philosophy-pole .pole-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 200;
+  letter-spacing: 2px;
+  line-height: 2.2;
+  color: var(--gin-nezumi-muted);
+}
+
+.philosophy-divider-vertical {
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, var(--kin), transparent);
+  opacity: 0.3;
+  align-self: stretch;
+}
+
+@media (max-width: 768px) {
+  .philosophy-poles {
+    flex-direction: column;
+    align-items: center;
+  }
+  .philosophy-divider-vertical {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--kin), transparent);
+    align-self: auto;
+  }
+  .philosophy-pole {
+    padding: 32px 16px;
+  }
+}
+
+/* Main statement */
+.philosophy-statement {
+  font-family: 'Zen Old Mincho', serif;
+  font-size: clamp(13px, 1.8vw, 17px);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  line-height: 2.8;
+  color: var(--gin-nezumi);
+  max-width: 640px;
+  margin: 0 auto 48px;
+}
+
+.philosophy-closing {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(11px, 1.2vw, 13px);
+  font-weight: 200;
+  letter-spacing: 3px;
+  line-height: 2.2;
+  color: var(--gin-nezumi-muted);
+}
+
+.philosophy-closing .highlight {
+  color: var(--kin);
+  font-weight: 400;
+}
+
+/* ========================================
+   SECTION HEADER (shared)
+======================================== */
+.section-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.section-header .label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--kin);
+  display: block;
+  margin-bottom: 16px;
+}
+
+.section-header h2 {
+  font-family: 'Zen Old Mincho', serif;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--gin-nezumi);
+}
+
+.section-header .line {
+  width: 40px;
+  height: 1px;
+  background: var(--kin);
+  margin: 24px auto 0;
+}
+
+/* ========================================
+   SECTION: WORKS (Analog)
+======================================== */
+#works {
+  padding: 120px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.works-slider {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.works-track {
+  display: flex;
+  transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.work-slide {
+  min-width: 100%;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+
+.work-image-frame {
+  position: relative;
+  width: min(500px, 80vw);
+  aspect-ratio: 4/3;
+  background: var(--sumi-light);
+  overflow: hidden;
+  border: 1px solid rgba(197, 160, 89, 0.1);
+}
+
+.work-image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(30%) contrast(110%) brightness(90%);
+  transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.8s ease;
+}
+
+.work-image-frame:hover img {
+  transform: scale(1.05);
+  filter: grayscale(0%) contrast(100%) brightness(100%);
+}
+
+/* Museum-style frame accent */
+.work-image-frame::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1px solid rgba(197, 160, 89, 0.15);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.work-info {
+  max-width: 320px;
+}
+
+.work-info .work-number {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--kin);
+  margin-bottom: 16px;
+}
+
+.work-info h3 {
+  font-family: 'Zen Old Mincho', serif;
+  font-size: clamp(20px, 3vw, 28px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+  color: var(--gin-nezumi);
+}
+
+.work-info p {
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 2;
+  color: var(--gin-nezumi-muted);
+}
+
+.works-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 32px;
+  margin-top: 60px;
+}
+
+.works-nav button {
+  background: none;
+  border: 1px solid rgba(197, 160, 89, 0.3);
+  color: var(--gin-nezumi);
+  width: 48px;
+  height: 48px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.works-nav button:hover {
+  border-color: var(--kin);
+  background: rgba(197, 160, 89, 0.05);
+}
+
+.works-counter {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--gin-nezumi-muted);
+}
+
+/* ========================================
+   SECTION: PROJECTS (Digital)
+======================================== */
+#projects {
+  padding: 120px 24px;
+  position: relative;
+}
+
+.projects-grid {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+}
+
+.project-card {
+  position: relative;
+  background: var(--sumi-light);
+  border: 1px solid rgba(197, 160, 89, 0.08);
+  padding: 48px 36px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color 0.4s;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.project-card:hover {
+  border-color: rgba(197, 160, 89, 0.3);
+}
+
+/* Glitch effect */
+.project-card::before,
+.project-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s;
+}
+
+.project-card::before {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(197, 160, 89, 0.03) 25%,
+    transparent 50%,
+    rgba(197, 160, 89, 0.03) 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+}
+
+.project-card:hover::before {
+  opacity: 1;
+  animation: glitchScan 0.8s linear infinite;
+}
+
+@keyframes glitchScan {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.project-card:hover .glitch-text {
+  animation: glitchText 0.3s linear;
+}
+
+@keyframes glitchText {
+  0% { transform: translate(0); }
+  10% { transform: translate(-2px, 1px); }
+  20% { transform: translate(2px, -1px); }
+  30% { transform: translate(-1px, 2px); }
+  40% { transform: translate(1px, -2px); }
+  50% { transform: translate(-2px, -1px); }
+  60% { transform: translate(2px, 1px); }
+  70% { transform: translate(0); }
+  100% { transform: translate(0); }
+}
+
+/* Scanline overlay on hover */
+.project-card:hover::after {
+  opacity: 1;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(197, 160, 89, 0.02) 2px,
+    rgba(197, 160, 89, 0.02) 4px
+  );
+}
+
+.project-card .project-tag {
+  font-family: 'Inter', sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--kin);
+  margin-bottom: 20px;
+  display: block;
+}
+
+.project-card h3 {
+  font-family: 'Zen Old Mincho', serif;
+  font-size: clamp(22px, 3vw, 30px);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 16px;
+  color: var(--gin-nezumi);
+}
+
+.project-card p {
+  font-size: 13px;
+  font-weight: 300;
+  line-height: 2;
+  color: var(--gin-nezumi-muted);
+  margin-bottom: 24px;
+}
+
+.project-card .project-link {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--kin);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: gap 0.3s;
+}
+
+.project-card:hover .project-link {
+  gap: 14px;
+}
+
+.project-link-arrow {
+  display: inline-block;
+  width: 20px;
+  height: 1px;
+  background: var(--kin);
+  position: relative;
+}
+
+.project-link-arrow::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-top: 1px solid var(--kin);
+  border-right: 1px solid var(--kin);
+  transform: rotate(45deg);
+}
+
+/* Floating digital noise particles */
+.digital-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.d-particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--kin);
+  opacity: 0;
+}
+
+/* ========================================
+   SECTION: PROFILE
+======================================== */
+#profile {
+  padding: 120px 24px;
+  position: relative;
+}
+
+.profile-container {
+  max-width: 900px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 80px;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+}
+
+.profile-visual {
+  position: relative;
+}
+
+.profile-image-frame {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: var(--sumi-light);
+  border: 1px solid rgba(197, 160, 89, 0.1);
+  overflow: hidden;
+  position: relative;
+}
+
+.profile-image-frame::after {
+  content: '墨';
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  font-family: 'Zen Old Mincho', serif;
+  font-size: 64px;
+  color: rgba(197, 160, 89, 0.06);
+  line-height: 1;
+}
+
+.profile-name-vertical {
+  font-family: 'Zen Old Mincho', serif;
+  writing-mode: vertical-rl;
+  position: absolute;
+  right: -40px;
+  top: 0;
+  font-size: 14px;
+  letter-spacing: 0.5em;
+  color: rgba(197, 160, 89, 0.2);
+}
+
+.profile-text h3 {
+  font-family: 'Zen Old Mincho', serif;
+  font-size: clamp(24px, 4vw, 36px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+  color: var(--gin-nezumi);
+}
+
+.profile-text .profile-name-en {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--kin);
+  margin-bottom: 32px;
+  display: block;
+}
+
+.profile-text .profile-bio {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 2.2;
+  color: var(--gin-nezumi-muted);
+  margin-bottom: 32px;
+}
+
+.profile-text .profile-bio strong {
+  color: var(--gin-nezumi);
+  font-weight: 400;
+}
+
+.profile-details {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(197, 160, 89, 0.1);
+}
+
+.profile-detail {
+  display: flex;
+  gap: 24px;
+}
+
+.profile-detail .detail-label {
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--kin);
+  min-width: 80px;
+}
+
+.profile-detail .detail-value {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--gin-nezumi-muted);
+}
+
+/* ========================================
+   FOOTER
+======================================== */
+footer {
+  padding: 80px 24px;
+  border-top: 1px solid rgba(197, 160, 89, 0.08);
+  text-align: center;
+}
+
+.footer-logo {
+  font-family: 'Zen Old Mincho', serif;
+  font-size: 18px;
+  letter-spacing: 8px;
+  color: var(--gin-nezumi);
+  margin-bottom: 32px;
+}
+
+.footer-socials {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 48px;
+}
+
+.footer-socials a {
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gin-nezumi-muted);
+  text-decoration: none;
+  transition: color 0.3s;
+  position: relative;
+}
+
+.footer-socials a:hover {
+  color: var(--kin);
+}
+
+.footer-copy {
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 2px;
+  color: rgba(224, 224, 224, 0.2);
+}
+
+/* ========================================
+   HORIZONTAL RULE (decorative)
+======================================== */
+.section-divider {
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--kin), transparent);
+  margin: 0 auto;
+  opacity: 0.3;
+}
+
+/* ========================================
+   REVEAL ANIMATIONS
+======================================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+@media (max-width: 768px) {
+  .work-slide {
+    flex-direction: column;
+    gap: 32px;
+  }
+  .work-info {
+    text-align: center;
+    max-width: 100%;
+  }
+  .profile-name-vertical {
+    display: none;
+  }
+  .cursor-dot, .cursor-ring {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+  .project-card {
+    padding: 36px 24px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Loading Screen -->
+<div id="loader">
+  <div class="loader-brush"></div>
+  <div class="loader-text">SUMI X</div>
+</div>
+
+<!-- Noise Overlay -->
+<div class="noise-overlay"></div>
+
+<!-- Seal Overlay -->
+<div class="seal-overlay"></div>
+
+<!-- Custom Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- Navigation -->
+<nav>
+  <a href="#hero" class="nav-logo">SUMI X</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#philosophy">Philosophy</a></li>
+    <li><a href="#works">Works</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#profile">Profile</a></li>
+  </ul>
+  <div class="menu-toggle" id="menuToggle">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ============================
+     HERO
+============================= -->
+<section id="hero">
+  <!-- Code Rain Background -->
+  <div class="code-rain" id="codeRain"></div>
+
+  <!-- Ink Particles -->
+  <div class="hero-bg-canvas" id="inkCanvas"></div>
+
+  <div class="hero-content">
+    <h1 class="hero-title" id="heroTitle">SUMI X</h1>
+    <div class="hero-divider" id="heroDivider"></div>
+    <p class="hero-sub" id="heroSub">Calligraphy &times; Artificial Intelligence</p>
+  </div>
+
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ============================
+     PHILOSOPHY
+============================= -->
+<div class="section-divider"></div>
+
+<section id="philosophy">
+  <div class="philosophy-content">
+
+    <!-- Dual Poles -->
+    <div class="philosophy-poles reveal">
+      <div class="philosophy-pole">
+        <div class="pole-label">Analog</div>
+        <div class="pole-title">書</div>
+        <p class="pole-desc">AIの介在しない、<br>呼吸と肉体による<br>100%のアナログ表現。</p>
+      </div>
+      <div class="philosophy-divider-vertical"></div>
+      <div class="philosophy-pole">
+        <div class="pole-label">Digital</div>
+        <div class="pole-title">設計</div>
+        <p class="pole-desc">感情を排した、<br>論理とコードによる<br>100%のデジタル知能。</p>
+      </div>
+    </div>
+
+    <!-- Main Statement -->
+    <p class="philosophy-statement reveal">
+      筆を執るとき、私は100%のアナログになる。<br>
+      コードを組むとき、私は100%のデジタルになる。<br>
+      この極限の二極を往来し、<br>
+      一人の人間の中で統合すること。
+    </p>
+
+    <p class="philosophy-closing reveal">
+      それが<span class="highlight">SUMI X</span>の真髄である。
+    </p>
+
+  </div>
+</section>
+
+<!-- ============================
+     WORKS (Analog)
+============================= -->
+<div class="section-divider"></div>
+
+<section id="works">
+  <div class="section-header reveal">
+    <span class="label">Analog Works</span>
+    <h2>書の仕事</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="works-slider">
+    <div class="works-track" id="worksTrack">
+      <!-- Slide 1 -->
+      <div class="work-slide">
+        <div class="work-image-frame">
+          <img src="images/work1.jpg" alt="那覇空港 国内線3階 チェックインロビー">
+        </div>
+        <div class="work-info">
+          <div class="work-number">01 / 02</div>
+          <h3>那覇空港 国内線3階 チェックインロビー</h3>
+          <p>国内線チェックインロビー常設。多くの旅人が行き交う出発の地に、空間を定義する「那覇空港」の四文字を揮毫。</p>
+        </div>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="work-slide">
+        <div class="work-image-frame">
+          <img src="images/work2.jpg" alt="錦鯉">
+        </div>
+        <div class="work-info">
+          <div class="work-number">02 / 02</div>
+          <h3>錦鯉</h3>
+          <p>For the Vancouver Nishiki Koi. British Columbia, Canada.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="works-nav">
+    <button id="worksPrev" aria-label="Previous">&#8592;</button>
+    <span class="works-counter"><span id="currentSlide">01</span> / <span id="totalSlides">02</span></span>
+    <button id="worksNext" aria-label="Next">&#8594;</button>
+  </div>
+</section>
+
+<!-- ============================
+     PROJECTS (Digital)
+============================= -->
+<div class="section-divider"></div>
+
+<section id="projects">
+  <div class="section-header reveal">
+    <span class="label">Digital Projects</span>
+    <h2>開発プロダクト</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="digital-particles" id="digitalParticles"></div>
+
+  <div class="projects-grid">
+    <a href="https://oracle-engine-uaes.onrender.com/" target="_blank" rel="noopener" class="project-card reveal">
+      <span class="project-tag">AI Diagnosis</span>
+      <h3 class="glitch-text">Oracle Engine</h3>
+      <p>MBTI性格診断とAIを組み合わせた副業適性診断エンジン。あなたの性格タイプに最適化されたAI副業ロードマップを生成する。</p>
+      <span class="project-link">
+        Experience <span class="project-link-arrow"></span>
+      </span>
+    </a>
+
+    <div class="project-card reveal" style="border: none; opacity: 0.35; cursor: default; background: transparent;">
+      <span class="project-tag">02 / Exploration</span>
+      <p>アナログとデジタルの交差点における、新たな可能性を探求中。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================
+     PROFILE
+============================= -->
+<div class="section-divider"></div>
+
+<section id="profile">
+  <div class="section-header reveal">
+    <span class="label">About</span>
+    <h2>人物</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="profile-container">
+    <div class="profile-visual reveal-left">
+      <div class="profile-image-frame">
+        <img src="images/profile.jpg" alt="高嶺泰志" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <span class="profile-name-vertical">高嶺泰志</span>
+    </div>
+
+    <div class="profile-text reveal-right">
+      <h3>高嶺 泰志</h3>
+      <span class="profile-name-en">Yasuyuki Takamine</span>
+      <p class="profile-bio">
+        書道家、AI設計者。<strong>カナダ・バンクーバー</strong>を拠点に活動。<br><br>
+        幼少期より書道を学び、筆の運びの中に「呼吸」と「魂」を見出す。
+        その後、テクノロジーの世界に深く没入し、人工知能の設計と開発に携わる。<br><br>
+        アナログの温もりとデジタルの知性。
+        相反する二つの力を統合し、<strong>新たな表現の地平</strong>を切り拓くことを使命とする。<br><br>
+        2026年8月、活動拠点を日本へ。アナログとデジタルの統合をさらに加速させる。
+      </p>
+
+      <div class="profile-details">
+        <div class="profile-detail">
+          <span class="detail-label">Base</span>
+          <span class="detail-value">Vancouver (Until Aug 2026) / Japan</span>
+        </div>
+        <div class="profile-detail">
+          <span class="detail-label">Craft</span>
+          <span class="detail-value">Calligraphy / AI Engineering</span>
+        </div>
+        <div class="profile-detail">
+          <span class="detail-label">Studio</span>
+          <span class="detail-value">SUMI X</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================
+     FOOTER
+============================= -->
+<footer>
+  <div class="footer-logo">SUMI X</div>
+  <div class="footer-socials">
+    <a href="https://x.com/SUMIX_official" target="_blank" rel="noopener">X (Twitter)</a>
+    <a href="https://www.instagram.com/sumix__official/" target="_blank" rel="noopener">Instagram</a>
+  </div>
+  <p class="footer-copy">&copy; 2025 SUMI X. All rights reserved.</p>
+</footer>
+
+<!-- ============================
+     JAVASCRIPT
+============================= -->
+<script>
+(function() {
+  'use strict';
+
+  // ========== LOADING SCREEN ==========
+  window.addEventListener('load', () => {
+    const loader = document.getElementById('loader');
+    gsap.to(loader, {
+      opacity: 0,
+      duration: 0.8,
+      delay: 1.8,
+      onComplete: () => {
+        loader.style.display = 'none';
+        initHeroAnimation();
+      }
+    });
+  });
+
+  // ========== CUSTOM CURSOR ==========
+  const dot = document.getElementById('cursorDot');
+  const ring = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0;
+
+  if (window.matchMedia('(pointer: fine)').matches) {
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.left = mouseX - 3 + 'px';
+      dot.style.top = mouseY - 3 + 'px';
+      ring.style.left = mouseX + 'px';
+      ring.style.top = mouseY + 'px';
+    });
+
+    document.querySelectorAll('a, button, .project-card').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+    });
+  }
+
+  // ========== MOBILE MENU ==========
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+
+  menuToggle.addEventListener('click', () => {
+    menuToggle.classList.toggle('active');
+    navLinks.classList.toggle('open');
+  });
+
+  navLinks.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      menuToggle.classList.remove('active');
+      navLinks.classList.remove('open');
+    });
+  });
+
+  // ========== CODE RAIN ==========
+  const codeRainEl = document.getElementById('codeRain');
+  const codeSnippets = [
+    'def create_soul():', 'import consciousness', 'while alive:', '  breathe()',
+    'class Mind:', '  def think(self):', 'return meaning', 'async def dream():',
+    'for stroke in brush:', '  canvas.draw()', 'yield wisdom', 'neural.connect()',
+    'transform(chaos, order)', 'print("墨")', 'self.evolve()', 'await future',
+    'lambda x: x.create()', 'if __name__ == "life":', '  run()', 'entropy += 1'
+  ];
+
+  for (let i = 0; i < 15; i++) {
+    const col = document.createElement('div');
+    col.className = 'code-column';
+    col.style.left = (Math.random() * 100) + '%';
+    col.style.animationDuration = (15 + Math.random() * 25) + 's';
+    col.style.animationDelay = (-Math.random() * 20) + 's';
+    col.style.fontSize = (10 + Math.random() * 4) + 'px';
+    const snippetCount = 3 + Math.floor(Math.random() * 5);
+    let text = '';
+    for (let j = 0; j < snippetCount; j++) {
+      text += codeSnippets[Math.floor(Math.random() * codeSnippets.length)] + ' ';
+    }
+    col.textContent = text;
+    codeRainEl.appendChild(col);
+  }
+
+  // ========== INK PARTICLES ==========
+  const inkCanvas = document.getElementById('inkCanvas');
+  for (let i = 0; i < 6; i++) {
+    const p = document.createElement('div');
+    p.className = 'ink-particle';
+    const size = 100 + Math.random() * 300;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = (Math.random() * 100) + '%';
+    p.style.top = (Math.random() * 100) + '%';
+    p.style.animationDelay = (-Math.random() * 20) + 's';
+    inkCanvas.appendChild(p);
+  }
+
+  // ========== HERO ANIMATION ==========
+  function initHeroAnimation() {
+    const title = document.getElementById('heroTitle');
+    const text = title.textContent;
+    title.textContent = '';
+
+    text.split('').forEach((char, i) => {
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.textContent = char === ' ' ? '\u00A0' : char;
+      title.appendChild(span);
+    });
+
+    const chars = title.querySelectorAll('.char');
+    const tl = gsap.timeline();
+
+    tl.to(chars, {
+      opacity: 1,
+      y: 0,
+      duration: 0.8,
+      stagger: 0.08,
+      ease: 'power3.out',
+      delay: 0.2
+    })
+    .to('#heroDivider', {
+      height: 40,
+      opacity: 0.6,
+      duration: 0.8,
+      ease: 'power2.out'
+    }, '-=0.3')
+    .to('#heroSub', {
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power2.out'
+    }, '-=0.4');
+  }
+
+  // ========== SCROLL REVEAL (GSAP + ScrollTrigger) ==========
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.utils.toArray('.reveal').forEach(el => {
+    gsap.to(el, {
+      opacity: 1,
+      y: 0,
+      duration: 1,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 85%',
+        once: true
+      }
+    });
+  });
+
+  gsap.utils.toArray('.reveal-left').forEach(el => {
+    gsap.to(el, {
+      opacity: 1,
+      x: 0,
+      duration: 1,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 85%',
+        once: true
+      }
+    });
+  });
+
+  gsap.utils.toArray('.reveal-right').forEach(el => {
+    gsap.to(el, {
+      opacity: 1,
+      x: 0,
+      duration: 1,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 85%',
+        once: true
+      }
+    });
+  });
+
+  // ========== WORKS SLIDER ==========
+  const track = document.getElementById('worksTrack');
+  const prevBtn = document.getElementById('worksPrev');
+  const nextBtn = document.getElementById('worksNext');
+  const currentSlideEl = document.getElementById('currentSlide');
+  const slides = track.querySelectorAll('.work-slide');
+  let currentIndex = 0;
+
+  function goToSlide(index) {
+    if (index < 0) index = slides.length - 1;
+    if (index >= slides.length) index = 0;
+    currentIndex = index;
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    currentSlideEl.textContent = String(currentIndex + 1).padStart(2, '0');
+  }
+
+  prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
+  nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
+
+  // Touch/swipe support
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  track.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  track.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) {
+      if (diff > 0) goToSlide(currentIndex + 1);
+      else goToSlide(currentIndex - 1);
+    }
+  }, { passive: true });
+
+  // ========== DIGITAL PARTICLES ==========
+  const particlesContainer = document.getElementById('digitalParticles');
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'd-particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    particlesContainer.appendChild(p);
+
+    gsap.to(p, {
+      opacity: Math.random() * 0.5,
+      duration: 1 + Math.random() * 2,
+      repeat: -1,
+      yoyo: true,
+      delay: Math.random() * 3
+    });
+
+    gsap.to(p, {
+      y: -20 + Math.random() * 40,
+      x: -10 + Math.random() * 20,
+      duration: 3 + Math.random() * 4,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut'
+    });
+  }
+
+  // ========== NAV HIDE/SHOW ON SCROLL ==========
+  let lastScroll = 0;
+  const nav = document.querySelector('nav');
+
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+    if (currentScroll > lastScroll && currentScroll > 100) {
+      nav.style.transform = 'translateY(-100%)';
+      nav.style.transition = 'transform 0.4s ease';
+    } else {
+      nav.style.transform = 'translateY(0)';
+    }
+    lastScroll = currentScroll;
+  }, { passive: true });
+
+  // ========== PHILOSOPHY PARALLAX ==========
+  gsap.to('.philosophy-poles', {
+    scrollTrigger: {
+      trigger: '#philosophy',
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: 1
+    },
+    y: -30,
+    ease: 'none'
+  });
+
+})();
+</script>
+
+</body>
+</html>
